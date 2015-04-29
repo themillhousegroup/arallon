@@ -10,6 +10,7 @@ crossScalaVersions := Seq("2.11.2", "2.10.4")
 organization := "com.themillhousegroup"
 
 libraryDependencies ++= Seq(
+		"joda-time" 									% 	"joda-time" 						% "2.7",
     "ch.qos.logback"              %   "logback-classic"       % "1.1.2",
     "com.typesafe.scala-logging"  %%  "scala-logging"         % "3.1.0",
     "org.mockito"                 %   "mockito-all"           % "1.9.0"       % "test",
