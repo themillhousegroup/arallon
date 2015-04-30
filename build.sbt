@@ -11,8 +11,7 @@ organization := "com.themillhousegroup"
 
 libraryDependencies ++= Seq(
 		"joda-time" 									% 	"joda-time" 						% "2.7",
-    "ch.qos.logback"              %   "logback-classic"       % "1.1.2",
-    "com.typesafe.scala-logging"  %%  "scala-logging"         % "3.1.0",
+    "com.typesafe.scala-logging"  %%  "scala-logging-slf4j"   % "2.1.2",
     "org.mockito"                 %   "mockito-all"           % "1.9.0"       % "test",
     "org.specs2"                  %%  "specs2"                % "2.3.12"      % "test"
 )

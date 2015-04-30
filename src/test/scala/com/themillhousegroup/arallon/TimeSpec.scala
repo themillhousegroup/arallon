@@ -6,21 +6,22 @@ import scala.concurrent.Future
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import org.joda.time.DateTime
+import com.typesafe.scalalogging.slf4j._
 
-class TimeSpec extends Specification {
+class TimeSpec extends Specification with LazyLogging {
 
   "Strongly-typed time" should {
     "allow construction of current time in a zone" in {
       val hereNow: TimeInZone[_ <: TimeZone] = TimeInZone.now
 
-      println(s"hereNow is a $hereNow")
+      logger.info(s"hereNow is a $hereNow")
       hereNow must not beNull
     }
 
     "allow construction of current time in an explicit zone" in {
       val gmtNow: TimeInZone[_ <: TimeZone] = TimeInZone.now("GMT")
 
-      println(s"gmtNow is a $gmtNow")
+      logger.info(s"gmtNow is a $gmtNow")
       gmtNow must not beNull
     }
 
@@ -28,11 +29,11 @@ class TimeSpec extends Specification {
       val millis = 1430222400000L
       val someUTCTime: TimeInZone[UTC] = TimeInZone.fromUTCMillis(millis)
 
-      println(s"someUTCTime is a $someUTCTime")
+      logger.info(s"someUTCTime is a $someUTCTime")
       someUTCTime must not beNull
 
       val melTime = someUTCTime.map[Melbourne]
-      println(s"melTime: $melTime")
+      logger.info(s"melTime: $melTime")
 
       melTime.utcMillis must beEqualTo(millis)
     }
@@ -40,7 +41,7 @@ class TimeSpec extends Specification {
     "allow construction of a UTC time representing 'now'" in {
       val nowUTCTime: TimeInZone[UTC] = TimeInZone.nowUTC
 
-      println(s"nowUTCTime is $nowUTCTime")
+      logger.info(s"nowUTCTime is $nowUTCTime")
 
       nowUTCTime must not beNull
 
@@ -55,8 +56,8 @@ class TimeSpec extends Specification {
       val paris = TimeInZone[Paris]
       val melbourne = TimeInZone[Melbourne]
 
-      //			println(s"paris is a $paris")
-      //			println(s"mel is a $melbourne")
+      //			logger.info(s"paris is a $paris")
+      //			logger.info(s"mel is a $melbourne")
 
       paris must not be equalTo(melbourne)
 
@@ -69,9 +70,9 @@ class TimeSpec extends Specification {
       val melbourne = TimeInZone[Melbourne](now)
       val parisInMel = paris.map[Melbourne]
 
-      println(s"paris is a   $paris")
-      println(s"mel is a $melbourne")
-      println(s"pIM is a $parisInMel")
+      logger.info(s"paris is a   $paris")
+      logger.info(s"mel is a $melbourne")
+      logger.info(s"pIM is a $parisInMel")
 
       paris must not be equalTo(melbourne)
 
