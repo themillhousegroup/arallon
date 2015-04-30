@@ -11,14 +11,14 @@ organization := "com.themillhousegroup"
 
 libraryDependencies ++= Seq(
 		"joda-time" 									% 	"joda-time" 						% "2.7",
-    "com.typesafe.scala-logging"  %%  "scala-logging-slf4j"   % "2.1.2",
-		"ch.qos.logback"        			%   "logback-classic"       % "1.1.2",
+		"org.scala-lang"              %   "scala-reflect"         % "2.11.2",
+    "com.typesafe.scala-logging"  %%  "scala-logging-slf4j"   % "2.1.2"			  % "test",
+		"ch.qos.logback"        			%   "logback-classic"       % "1.1.2"				% "test",
     "org.mockito"                 %   "mockito-all"           % "1.9.0"       % "test",
     "org.specs2"                  %%  "specs2"                % "2.3.12"      % "test"
 )
 
-resolvers ++= Seq(  "oss-snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
-                    "oss-releases"  at "https://oss.sonatype.org/content/repositories/releases",
+resolvers ++= Seq(  "oss-releases"  at "https://oss.sonatype.org/content/repositories/releases",
                     "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/")
 
 jacoco.settings
