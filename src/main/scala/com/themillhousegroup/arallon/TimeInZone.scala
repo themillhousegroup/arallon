@@ -55,7 +55,6 @@ object TimeInZone {
   /** Uses the current JVM's timezone to return a strongly-typed instance */
   def now: TimeInZone[TimeZone] = {
     val z = DateTimeZone.getDefault.getID
-    println(s"default tz: $z")
     now(z)
   }
 
