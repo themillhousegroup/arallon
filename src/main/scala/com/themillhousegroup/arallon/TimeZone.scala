@@ -11,7 +11,11 @@ abstract class TimeZoneAdapter(val name: String) extends TimeZone {
   val toStringName = name.split("/").last
 
   override def toString: String = s"$toStringName"
+}
 
+/** When there's no known match */
+final class LocalTimeZoneAdapter(name: String) extends TimeZoneAdapter(name) {
+  override def toString: String = s"Local ($toStringName)"
 }
 
 // Refer: https://garygregory.wordpress.com/2013/06/18/what-are-the-java-timezone-ids/
@@ -24,7 +28,6 @@ class EST extends TimeZoneAdapter("EST") // New York
 class PST extends TimeZoneAdapter("PST") // San Francisco
 object Melbourne extends Melbourne
 class Melbourne extends TimeZoneAdapter("Australia/Melbourne")
-class Local(override val name: String) extends TimeZoneAdapter(name)
 
 object TimeZone {
   def apply(tzName: String): TimeZone = {
@@ -32,7 +35,7 @@ object TimeZone {
       case UTC.name => UTC
       case Paris.name => Paris
       case Melbourne.name => Melbourne
-      case _ => new Local(tzName)
+      case _ => new LocalTimeZoneAdapter(tzName)
     }
   }
 }
