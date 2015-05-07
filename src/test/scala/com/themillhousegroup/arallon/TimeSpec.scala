@@ -7,6 +7,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import org.joda.time.DateTime
 import com.typesafe.scalalogging.slf4j._
+import com.themillhousegroup.arallon.zones.{ UTC, Melbourne, Paris }
 
 class TimeSpec extends Specification with LazyLogging {
 

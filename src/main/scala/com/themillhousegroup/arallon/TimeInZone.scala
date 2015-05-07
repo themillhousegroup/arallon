@@ -2,6 +2,7 @@ package com.themillhousegroup.arallon
 
 import org.joda.time._
 import scala.reflect.runtime.universe._
+import com.themillhousegroup.arallon.zones.UTC
 
 object TimeInZone {
   import java.lang.reflect.Constructor
@@ -32,7 +33,7 @@ object TimeInZone {
   /** When you just want whatever time it is right now, expressed in UTC */
   def nowUTC: TimeInZone[UTC] = {
     val utc = new DateTime(DateTimeZone.UTC)
-    new TimeInZone(UTC, utc)
+    new TimeInZone(TimeZone.UTC, utc)
   }
 
   def apply[T <: TimeZone: TypeTag]: TimeInZone[T] = {
@@ -43,7 +44,7 @@ object TimeInZone {
   /** When all you have is millis. Implies that you are in UTC, so gives back a strong type to that effect */
   def fromUTCMillis(utcMillis: Long): TimeInZone[UTC] = {
     val utcTime = new DateTime(utcMillis, DateTimeZone.UTC)
-    new TimeInZone(UTC, utcTime)
+    new TimeInZone(TimeZone.UTC, utcTime)
   }
 
   def fromUTC[T <: TimeZone: TypeTag](utcTime: DateTime): TimeInZone[T] = {
