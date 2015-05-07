@@ -9,15 +9,16 @@ crossScalaVersions := Seq("2.11.2", "2.10.4")
 
 organization := "com.themillhousegroup"
 
-libraryDependencies ++= Seq(
+libraryDependencies  <++= (scalaVersion) { (v) =>
+    Seq(
 		"joda-time" 									% 	"joda-time" 						% "2.7",
 		"org.joda" 									  % 	"joda-convert" 					% "1.7" 			  % "compile",
-		"org.scala-lang"              %   "scala-reflect"         % "2.11.2",
+		"org.scala-lang"              %   "scala-reflect"         % v,
     "com.typesafe.scala-logging"  %%  "scala-logging-slf4j"   % "2.1.2"			  % "test",
 		"ch.qos.logback"        			%   "logback-classic"       % "1.1.2"				% "test",
     "org.mockito"                 %   "mockito-all"           % "1.9.0"       % "test",
     "org.specs2"                  %%  "specs2"                % "2.3.12"      % "test"
-)
+)}
 
 resolvers ++= Seq(  "oss-releases"  at "https://oss.sonatype.org/content/repositories/releases",
                     "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/")
