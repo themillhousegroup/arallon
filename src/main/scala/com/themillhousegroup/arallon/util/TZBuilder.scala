@@ -23,7 +23,7 @@ object TZBuilder {
 
     singleWordNames.map {
       case (k, v) =>
-        k -> s"""object $k extends $k\nclass $k extends TimeZoneAdapter("$v")\n"""
-    }.values.toList
+        k -> s"""class $k extends TimeZoneAdapter("$v")\n"""
+    }.values.toList.sortWith(caseInsensitiveStringSort)
   }
 }
