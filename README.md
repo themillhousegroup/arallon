@@ -36,6 +36,10 @@ bar
 baz 
 ```
 
+If you're looking for something client-side to generate a nice IANA string (like `Europe/Paris`) take a look at
+[https://bitbucket.org/pellepim/jstimezonedetect] - pass that to your Scala server-side and you can be strongly-typed
+from then on.
+
 
 ### Still To-Do
 
