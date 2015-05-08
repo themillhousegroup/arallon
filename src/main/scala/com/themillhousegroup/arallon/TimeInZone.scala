@@ -1,23 +1,11 @@
 package com.themillhousegroup.arallon
 
 import org.joda.time._
-import scala.reflect.runtime.universe._
+import com.themillhousegroup.arallon.util.ReflectionHelper
 import com.themillhousegroup.arallon.zones.UTC
+import scala.reflect.runtime.universe._
 
 object TimeInZone {
-  import java.lang.reflect.Constructor
-
-  private val m = runtimeMirror(getClass.getClassLoader)
-
-  private def constructor[_](m: RuntimeMirror, t: Type): Constructor[_] = {
-    val c = m.runtimeClass(t.typeSymbol.asClass)
-    c.getConstructors()(0)
-  }
-
-  private def construct[T](t: Type, args: List[Object]) = {
-    constructor(m, t).newInstance(args.toArray: _*).asInstanceOf[T]
-  }
-
   /** Uses the current JVM's timezone to return a strongly-typed instance */
   def now: TimeInZone[TimeZone] = {
     val z = DateTimeZone.getDefault.getID
@@ -49,7 +37,7 @@ object TimeInZone {
 
   def fromUTC[T <: TimeZone: TypeTag](utcTime: DateTime): TimeInZone[T] = {
     val t = typeOf[T]
-    val tzInstance: T = construct(t, List())
+    val tzInstance: T = ReflectionHelper.construct(t, List())
     new TimeInZone(tzInstance, utcTime)
   }
 
@@ -60,7 +48,7 @@ object TimeInZone {
 
   def apply[T <: TimeZone: TypeTag](timeInThatZone: DateTime): TimeInZone[T] = {
     val t = typeOf[T]
-    val tzInstance: T = construct(t, List())
+    val tzInstance: T = ReflectionHelper.construct(t, List())
     populateWithTime(tzInstance, timeInThatZone).asInstanceOf[TimeInZone[T]]
   }
 }
