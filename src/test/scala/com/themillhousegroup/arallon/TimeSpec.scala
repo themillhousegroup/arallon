@@ -164,6 +164,21 @@ class TimeSpec extends Specification with LazyLogging {
       laterHere.isBefore(laterHere) must beFalse
     }
 
+    "Correctly detect 'before' situations - across TZ" in {
+      val instant = new DateTime()
+      val inParis = TimeInZone[Paris](instant)
+      val inSydney = TimeInZone[Sydney](instant)
+      val inSydney2 = TimeInZone[Sydney](instant)
+      val inUTC = TimeInZone.fromUTCMillis(instant.getMillis)
+
+      inSydney.isBefore(inParis) must beTrue // Sydney gets to 9am Monday Jan 1, 2020 before Paris does 
+      inParis.isBefore(inSydney) must beFalse
+
+      inSydney.isBefore(inSydney2) must beFalse
+
+      inSydney.isBefore(inUTC) must beFalse
+    }
+
     "Correctly detect 'after' situations - local TZ" in {
       val earlierHere = TimeInZone.fromUTCMillis(149666777L)
       val laterHere = TimeInZone.fromUTCMillis(159666777L)
