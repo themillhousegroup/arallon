@@ -5,7 +5,7 @@ import org.specs2.mock._
 import scala.concurrent.Future
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
-import org.joda.time.DateTime
+import org.joda.time.{ DateTimeZone, DateTime }
 import com.typesafe.scalalogging.slf4j._
 import com.themillhousegroup.arallon.zones._
 
@@ -28,7 +28,7 @@ class ComparisonSpec extends Specification with LazyLogging {
       val inParis = TimeInZone[Paris](instant)
       val inSydney = TimeInZone[Sydney](instant)
       val inSydney2 = TimeInZone[Sydney](instant)
-      val inUTC = TimeInZone.fromUTCMillis(instant.getMillis)
+      val inUTC = TimeInZone.fromUTCMillis(inSydney.utcMillis)
 
       inParis.isEqual(inSydney) must beFalse // They don't refer to the same instant
 
@@ -54,7 +54,7 @@ class ComparisonSpec extends Specification with LazyLogging {
       val inParis = TimeInZone[Paris](instant)
       val inSydney = TimeInZone[Sydney](instant)
       val inSydney2 = TimeInZone[Sydney](instant)
-      val inUTC = TimeInZone.fromUTCMillis(instant.getMillis)
+      val inUTC = TimeInZone.fromUTCMillis(inSydney.utcMillis)
 
       inSydney.isBefore(inParis) must beTrue // Sydney gets to 9am Monday Jan 1, 2020 before Paris does 
       inParis.isBefore(inSydney) must beFalse
