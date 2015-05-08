@@ -24,11 +24,6 @@ object TimeInZone {
     new TimeInZone(TimeZone.UTC, utc)
   }
 
-  def apply[T <: TimeZone: TypeTag]: TimeInZone[T] = {
-    val nowUTC = new DateTime(DateTimeZone.UTC)
-    apply[T](nowUTC)
-  }
-
   /** When all you have is millis. Implies that you are in UTC, so gives back a strong type to that effect */
   def fromUTCMillis(utcMillis: Long): TimeInZone[UTC] = {
     val utcTime = new DateTime(utcMillis, DateTimeZone.UTC)
@@ -46,6 +41,11 @@ object TimeInZone {
     new TimeInZone(tzInstance, utc)
   }
 
+  def apply[T <: TimeZone: TypeTag]: TimeInZone[T] = {
+    val nowUTC = new DateTime(DateTimeZone.UTC)
+    apply[T](nowUTC)
+  }
+
   def apply[T <: TimeZone: TypeTag](timeInThatZone: DateTime): TimeInZone[T] = {
     val t = typeOf[T]
     val tzInstance: T = ReflectionHelper.construct(t, List())
@@ -53,7 +53,7 @@ object TimeInZone {
   }
 }
 
-case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends Ordered[TimeInZone[T]] {
+case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends Ordered[TimeInZone[T]] with traits.Comparisons[T] {
   val utcMillis: Long = utc.getMillis
   lazy val local: DateTime = utc.withZone(timezone.zone)
   lazy val asLocalDateTime: LocalDateTime = local.toLocalDateTime
