@@ -34,6 +34,7 @@ class ComparisonSpec extends Specification with LazyLogging {
 
       inSydney.isEqual(inSydney2) must beTrue
 
+      logger.info(s"isEqual Comparing\n$inUTC\nwith\n$inSydney\n")
       inSydney.isEqual(inUTC) must beTrue
     }
 
@@ -60,6 +61,8 @@ class ComparisonSpec extends Specification with LazyLogging {
 
       inSydney.isBefore(inSydney2) must beFalse
 
+      logger.info(s"before Comparing\n$inUTC\nwith\n$inSydney\n")
+
       inSydney.isBefore(inUTC) must beFalse
     }
 
@@ -72,6 +75,24 @@ class ComparisonSpec extends Specification with LazyLogging {
       laterHere.isAfter(earlierHere) must beTrue
 
       laterHere.isAfter(laterHere) must beFalse
+    }
+
+    "Correctly detect 'between' situations - local TZ" in {
+      val firstHere = TimeInZone.fromUTCMillis(149666777L)
+      val secondHere = TimeInZone.fromUTCMillis(159666777L)
+      val thirdHere = TimeInZone.fromUTCMillis(169666777L)
+
+      secondHere.isBetween(firstHere, thirdHere) must beTrue
+
+      secondHere.isBetween(firstHere, secondHere) must beTrue
+
+      secondHere.isBetween(secondHere, thirdHere) must beTrue
+
+      firstHere.isBetween(firstHere, thirdHere) must beTrue
+
+      firstHere.isBetween(secondHere, thirdHere) must beFalse
+
+      thirdHere.isBetween(firstHere, secondHere) must beFalse
     }
   }
 }
