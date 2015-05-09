@@ -4,6 +4,7 @@ import org.joda.time._
 import com.themillhousegroup.arallon.util.ReflectionHelper
 import com.themillhousegroup.arallon.zones.UTC
 import scala.reflect.runtime.universe._
+import scala.reflect.ClassTag
 
 object TimeInZone {
   /** Uses the current JVM's timezone to return a strongly-typed instance */
