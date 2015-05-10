@@ -71,10 +71,10 @@ case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends
     TimeInZone.fromUTC[B](this.utc)
   }
 
-  /** Apply a transform to the underlying DateTime, resulting in a new instance in the same TimeZone */
+  /** Apply a transform to the underlying _local_ DateTime, resulting in a new instance in the same TimeZone */
   def transform(transformation: DateTime => DateTime): TimeInZone[T] = {
-    val result = transformation(utc)
-    this.copy(utc = result)
+    val result = transformation(local)
+    this.copy(utc = result.withZone(DateTimeZone.UTC))
   }
 
   override def toString: String = {
