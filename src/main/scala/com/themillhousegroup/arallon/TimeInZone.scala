@@ -3,6 +3,7 @@ package com.themillhousegroup.arallon
 import org.joda.time._
 import com.themillhousegroup.arallon.util.ReflectionHelper
 import com.themillhousegroup.arallon.zones.UTC
+import scala.reflect._
 import scala.reflect.runtime.universe._
 import scala.reflect.ClassTag
 
@@ -31,26 +32,26 @@ object TimeInZone {
     new TimeInZone(TimeZone.UTC, utcTime)
   }
 
-  def fromUTC[T <: TimeZone: TypeTag](utcTime: DateTime): TimeInZone[T] = {
-    val t = typeOf[T]
+  def fromUTC[T <: TimeZone: ClassTag](utcTime: DateTime): TimeInZone[T] = {
+    val t = classTag[T]
     val tzInstance: T = ReflectionHelper.construct(t, List())
     new TimeInZone(tzInstance, utcTime)
+  }
+
+  def apply[T <: TimeZone: ClassTag]: TimeInZone[T] = {
+    val nowUTC = new DateTime(DateTimeZone.UTC)
+    apply[T](nowUTC)
+  }
+
+  def apply[T <: TimeZone: ClassTag](timeInThatZone: DateTime): TimeInZone[T] = {
+    val t = classTag[T]
+    val tzInstance: T = ReflectionHelper.construct(t, List())
+    populateWithTime(tzInstance, timeInThatZone).asInstanceOf[TimeInZone[T]]
   }
 
   private def populateWithTime(tzInstance: TimeZone, timeInThatZone: DateTime) = {
     val utc = timeInThatZone.withZoneRetainFields(tzInstance.zone).withZone(DateTimeZone.UTC)
     new TimeInZone(tzInstance, utc)
-  }
-
-  def apply[T <: TimeZone: TypeTag]: TimeInZone[T] = {
-    val nowUTC = new DateTime(DateTimeZone.UTC)
-    apply[T](nowUTC)
-  }
-
-  def apply[T <: TimeZone: TypeTag](timeInThatZone: DateTime): TimeInZone[T] = {
-    val t = typeOf[T]
-    val tzInstance: T = ReflectionHelper.construct(t, List())
-    populateWithTime(tzInstance, timeInThatZone).asInstanceOf[TimeInZone[T]]
   }
 }
 
@@ -66,7 +67,7 @@ case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends
   def compare(that: TimeInZone[T]): Int = (this.utcMillis - that.utcMillis).toInt
 
   /** Return a TimeInZone that represents the exact same instant, but in TimeZone B */
-  def map[B <: TimeZone: TypeTag]: TimeInZone[B] = {
+  def map[B <: TimeZone: ClassTag]: TimeInZone[B] = {
     TimeInZone.fromUTC[B](this.utc)
   }
 
