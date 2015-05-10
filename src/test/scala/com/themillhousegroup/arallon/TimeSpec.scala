@@ -115,8 +115,10 @@ class TimeSpec extends Specification with LazyLogging {
       paris.utc must be equalTo (melbourne.utc)
     }
 
-    "allow me to transform a time within a timezone" in {
+    "allow me to offset a time within a timezone" in {
       val paris = TimeInZone[Paris]
+
+      val parisMillis = paris.utcMillis
 
       val laterThatDay = paris.transform(_.plusHours(3))
       paris must not be equalTo(laterThatDay)
@@ -124,6 +126,25 @@ class TimeSpec extends Specification with LazyLogging {
       paris.timezone must beEqualTo(laterThatDay.timezone)
 
       paris.utc must not be equalTo(laterThatDay.utc)
+
+      val laterMillis = laterThatDay.utcMillis
+
+      laterMillis must beEqualTo(parisMillis + (3 * 60 * 60 * 1000))
+    }
+
+    "allow me to adjust a time within a timezone" in {
+      val paris = TimeInZone[Paris]
+
+      val laterThatDay = paris.transform(_.withTime(17, 0, 0, 0))
+      paris must not be equalTo(laterThatDay)
+
+      paris.timezone must beEqualTo(laterThatDay.timezone)
+
+      paris.utc must not be equalTo(laterThatDay.utc)
+
+      println(laterThatDay.utc.getHourOfDay)
+
+      laterThatDay.utc.getHourOfDay must not be equalTo(17)
     }
   }
 }
