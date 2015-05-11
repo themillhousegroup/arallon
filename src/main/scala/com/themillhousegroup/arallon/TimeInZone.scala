@@ -49,6 +49,11 @@ object TimeInZone {
     populateWithTime(tzInstance, timeInThatZone).asInstanceOf[TimeInZone[T]]
   }
 
+  def apply(javaTimeZoneName: String, timeInThatZone: DateTime): TimeInZone[TimeZone] = {
+    val tzInstance = TimeZone(javaTimeZoneName)
+    populateWithTime(tzInstance, timeInThatZone)
+  }
+
   private def populateWithTime(tzInstance: TimeZone, timeInThatZone: DateTime) = {
     val utc = timeInThatZone.withZoneRetainFields(tzInstance.zone).withZone(DateTimeZone.UTC)
     new TimeInZone(tzInstance, utc)
