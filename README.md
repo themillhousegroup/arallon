@@ -33,14 +33,23 @@ Once you have __arallon__ added to your project, you can start using it like thi
 ```
 import com.themillhousegroup.arallon._
 import com.themillhousegroup.arallon.zones._
+```
 
+##### Get a strongly-typed representation of "now":
+```
 val nowInParis = TimeInZone[Paris]
 // TimeInZone[Paris] UTC: '2015-05-10T03:04:15.876Z' Local: '2015-05-10T05:04:15.876+02:00'
+```
 
+##### Transform the time, while remaining in the same time zone:
+```
 val threePMParisConferenceCall = nowInParis.transform(_.withTime(15,0,0,0))
 // TimeInZone[Paris] UTC: '2015-05-10T13:00:00.000Z' Local: '2015-05-10T15:00:00.000+02:00
+```
 
-val wakeUpCall = fPMParisConferenceCall.map[Sydney]
+##### Map an instant to another time zone:
+```
+val wakeUpCall = threePMParisConferenceCall.map[Sydney]
 // TimeInZone[Sydney] UTC: '2015-05-10T13:00:00.000Z' Local: '2015-05-10T23:00:00.000+10:00'
 
 ```
