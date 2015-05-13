@@ -21,9 +21,9 @@ object TZBuilder {
       last -> tz
     }.toMap
 
-    singleWordNames.map {
+    singleWordNames.filter { case (k, v) => k != "UTC" }.map {
       case (k, v) =>
-        k -> s"""class $k extends TimeZoneAdapter("$v")\n"""
+        k -> s"""class $k extends NonUTCTimeZone("$v")\n"""
     }.values.toList.sortWith(caseInsensitiveStringSort)
   }
 }
