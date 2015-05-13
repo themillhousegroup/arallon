@@ -53,6 +53,30 @@ class TimeSpec extends Specification with LazyLogging {
       newUTCTime must beEqualTo(nowUTCTime)
     }
 
+    "allow construction of a time in a zone by zone ID and millis" in {
+      val millis = 1430222400000L
+      val newYork = TimeInZone.fromMillis(millis, "America/New_York")
+      val losAngeles = TimeInZone.fromMillis(millis, "America/Los_Angeles")
+
+      newYork must not be equalTo(losAngeles)
+
+      newYork.timezone must not be equalTo(losAngeles.timezone)
+
+      newYork.utcMillis must beEqualTo(losAngeles.utcMillis) // They are the same instant after all...
+    }
+
+    "allow construction of a time in a zone by zone ID and DT" in {
+      val dt = new DateTime()
+      val newYork = TimeInZone("America/New_York", dt)
+      val losAngeles = TimeInZone("America/Los_Angeles", dt)
+
+      newYork must not be equalTo(losAngeles)
+
+      newYork.timezone must not be equalTo(losAngeles.timezone)
+
+      newYork.utcMillis must not be equalTo(losAngeles.utcMillis)
+    }
+
     "allow construction of current time in a zone purely by type signature" in {
       val paris = TimeInZone[Paris]
       val melbourne = TimeInZone[Melbourne]

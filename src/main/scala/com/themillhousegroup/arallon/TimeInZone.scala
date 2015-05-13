@@ -32,11 +32,11 @@ object TimeInZone {
     new TimeInZone(TimeZone.UTC, utcTime)
   }
 
-  /** Take an instant expressed in millis and return it as a TimeInZone in the specified zone */
+  /** Take an instant expressed in millis (UTC) and return it as a TimeInZone in the specified zone */
   def fromMillis(utcMillis: Long, javaTimeZoneName: String): TimeInZone[TimeZone] = {
-    val utcTime = new org.joda.time.DateTime(utcMillis)
+    val utc = new org.joda.time.DateTime(utcMillis, DateTimeZone.UTC)
     val tzInstance = TimeZone(javaTimeZoneName)
-    populateWithTime(tzInstance, utcTime)
+    new TimeInZone(tzInstance, utc)
   }
 
   def fromUTC[T <: TimeZone: ClassTag](utcTime: DateTime): TimeInZone[T] = {
