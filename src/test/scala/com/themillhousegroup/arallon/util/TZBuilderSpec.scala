@@ -16,7 +16,7 @@ class TZBuilderSpec extends Specification {
 
       //			println(TZBuilder.rebuildTimeZones.mkString(""))
 
-      TZBuilder.rebuildTimeZones.size must beGreaterThanOrEqualTo(545) // If this fails, we know that we need to rebuild...
+      TZBuilder.rebuildTimeZones.size must beGreaterThanOrEqualTo(544) // If this fails, we know that we need to rebuild...
     }
   }
 
