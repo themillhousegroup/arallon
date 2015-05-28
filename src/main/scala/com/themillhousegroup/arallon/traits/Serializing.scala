@@ -10,13 +10,13 @@ trait Serializing[TZ <: TimeZone] {
 
 object TimeInZoneSerializing {
   // There seems to be no way to express this just once: :-(
-  private val serializationFormat = """%d:%s"""
-  private val deserializationRegex = """^(\d*)[:](.*)$""".r
+  private val serializationFormat = """%dZ:%s"""
+  private val deserializationRegex = """^(\d*)Z:(.*)$""".r
 
   def serialize[TZ <: TimeZone](t: TimeInZone[TZ]): String = {
     val r = String.format(serializationFormat, t.utcMillis.asInstanceOf[Object], t.timezone.name)
     // Ensure we can read our own output
-    if (deserialize(r) != t) {
+    if (deserialize(r) != Some(t)) {
       throw new RuntimeException(s"Couldn't read our own serialized output: $r")
     }
     r
