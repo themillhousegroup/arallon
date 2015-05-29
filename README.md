@@ -21,7 +21,7 @@ Bring in the library by adding the following to your ```build.sbt```.
 
 ```
    libraryDependencies ++= Seq(
-     "com.themillhousegroup" %% "arallon" % "0.1.16"
+     "com.themillhousegroup" %% "arallon" % "0.1.18"
    )
 
 ```
@@ -61,10 +61,20 @@ If you're looking for something client-side to generate a nice IANA string (like
 [jstimezonedetect on GitHub](https://bitbucket.org/pellepim/jstimezonedetect) - pass that to your Scala server-side and you can be strongly-typed
 from then on.
 
+##### Serialize / Deserialize `TimeInZone` instances:
 
-### Still To-Do
+```
+import com.themillhousegroup.arallon.traits.TimeInZoneSerializing
 
-Lots.
+
+val t = TimeInZone[Paris]
+
+val s = t.serialize(t) 
+
+// Gives: "435363632Z:Europe/Paris"
+
+val t2:TimeInZone[TimeZone] = TimeInZoneSerializing.deserialize(s) 
+```
 
 ### Credits
  - The fantastic [Joda-Time](http://www.joda.org/joda-time/) does all the heavy lifting
