@@ -2,6 +2,7 @@ package com.themillhousegroup.arallon
 
 import org.joda.time._
 import com.themillhousegroup.arallon.util.ReflectionHelper
+import com.themillhousegroup.arallon.traits._
 import scala.reflect._
 import scala.reflect.ClassTag
 
@@ -65,7 +66,8 @@ object TimeInZone {
   }
 }
 
-case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends Ordered[TimeInZone[T]] with traits.Comparisons[T] {
+case class TimeInZone[TZ <: TimeZone](val timezone: TZ, val utc: DateTime) extends Ordered[TimeInZone[TZ]]
+    with Comparisons[TZ] with Serializing[TZ] {
   val utcMillis: Long = utc.getMillis
   lazy val local: DateTime = utc.withZone(timezone.zone)
   lazy val asLocalDateTime: LocalDateTime = local.toLocalDateTime
@@ -74,7 +76,7 @@ case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends
    * Note this only works against other instances of TimeInZone[T].
    * TODO: Supply an Ordering[TimeInZone[_ <: Timezone] from the companion object
    */
-  def compare(that: TimeInZone[T]): Int = (this.utcMillis - that.utcMillis).toInt
+  def compare(that: TimeInZone[TZ]): Int = (this.utcMillis - that.utcMillis).toInt
 
   /** Return a TimeInZone that represents the exact same instant, but in TimeZone B */
   def map[B <: TimeZone: ClassTag]: TimeInZone[B] = {
@@ -82,7 +84,7 @@ case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends
   }
 
   /** Apply a transform to the underlying _local_ DateTime, resulting in a new instance in the same TimeZone */
-  def transform(transformation: DateTime => DateTime): TimeInZone[T] = {
+  def transform(transformation: DateTime => DateTime): TimeInZone[TZ] = {
     val result = transformation(local)
     this.copy(utc = result.withZone(DateTimeZone.UTC))
   }
@@ -90,6 +92,5 @@ case class TimeInZone[T <: TimeZone](val timezone: T, val utc: DateTime) extends
   override def toString: String = {
     s"TimeInZone[${timezone}] UTC: '$utc' UTCMillis: '$utcMillis' Local: '$local' LocalDT: '$asLocalDateTime'"
   }
-
 }
 

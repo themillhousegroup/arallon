@@ -13,7 +13,7 @@ class SerializingSpec extends Specification {
   val testTimeMillis = 432198765L
   val testZone = "Europe/Paris"
 
-  "Serialization" should {
+  "Serialization (from object)" should {
 
     "Allow a TimeInZone[UTC] to be serialized to a String" in {
       val t = TimeInZone.fromUTCMillis(testTimeMillis)
@@ -23,6 +23,24 @@ class SerializingSpec extends Specification {
     "Allow a TimeInZone[TZ] to be serialized to a String" in {
       val t = TimeInZone.fromMillis(testTimeMillis, testZone)
       TimeInZoneSerializing.serialize(t) must beEqualTo(s"${testTimeMillis}Z:$testZone")
+    }
+
+    "Throw a RuntimeException if we can't read our own output" in {
+      val t = TimeInZone.fromMillis(-1, testZone) // The negative sign is not expected when we read our output
+      TimeInZoneSerializing.serialize(t) must throwA[RuntimeException]
+    }
+  }
+
+  "Serialization (from instance)" should {
+
+    "Allow a TimeInZone[UTC] to be serialized to a String" in {
+      val t = TimeInZone.fromUTCMillis(testTimeMillis)
+      t.serialize must beEqualTo(s"${testTimeMillis}Z:UTC")
+    }
+
+    "Allow a TimeInZone[TZ] to be serialized to a String" in {
+      val t = TimeInZone.fromMillis(testTimeMillis, testZone)
+      t.serialize must beEqualTo(s"${testTimeMillis}Z:$testZone")
     }
   }
 
