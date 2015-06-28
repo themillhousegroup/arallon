@@ -38,10 +38,15 @@ object TimeInZone {
     new TimeInZone(tzInstance, utc)
   }
 
-  def fromUTC[T <: TimeZone: ClassTag](utcTime: DateTime): TimeInZone[T] = {
+  def fromUTCTo[T <: TimeZone: ClassTag](utcTime: DateTime): TimeInZone[T] = {
     val t = classTag[T]
     val tzInstance: T = ReflectionHelper.construct(t, List())
     new TimeInZone(tzInstance, utcTime)
+  }
+
+  /** You have a Joda DateTime that is already in UTC, you just want the TimeInZone equivalent */
+  def fromUTC(utcTime: DateTime): TimeInZone[UTC] = {
+    new TimeInZone(TimeZone.UTC, utcTime)
   }
 
   def apply[T <: TimeZone: ClassTag]: TimeInZone[T] = {
@@ -80,7 +85,12 @@ case class TimeInZone[TZ <: TimeZone](val timezone: TZ, val utc: DateTime) exten
 
   /** Return a TimeInZone that represents the exact same instant, but in TimeZone B */
   def map[B <: TimeZone: ClassTag]: TimeInZone[B] = {
-    TimeInZone.fromUTC[B](this.utc)
+    val t = classTag[B]
+    if (t.runtimeClass == timezone.getClass) {
+      this.asInstanceOf[TimeInZone[B]]
+    } else {
+      TimeInZone.fromUTCTo[B](this.utc)
+    }
   }
 
   /** Return a TimeInZone that represents the exact same instant, but in the TimeZone denoted by the given String */

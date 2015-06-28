@@ -139,6 +139,19 @@ class TimeSpec extends Specification with LazyLogging {
       paris.utc must be equalTo (melbourne.utc)
     }
 
+    "return 'this' if mapping from one timezone to itself" in {
+      val paris = TimeInZone[Paris]
+
+      val melbourne = paris.map[Melbourne]
+      paris must not be equalTo(melbourne)
+
+      val p1 = System.identityHashCode(paris)
+      val paris2 = paris.map[Paris]
+      val p2 = System.identityHashCode(paris2)
+
+      p1 must beEqualTo(p2)
+    }
+
     "allow me to offset a time within a timezone" in {
       val paris = TimeInZone[Paris]
 
