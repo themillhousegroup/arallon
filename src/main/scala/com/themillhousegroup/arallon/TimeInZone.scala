@@ -83,6 +83,12 @@ case class TimeInZone[TZ <: TimeZone](val timezone: TZ, val utc: DateTime) exten
     TimeInZone.fromUTC[B](this.utc)
   }
 
+  /** Return a TimeInZone that represents the exact same instant, but in the TimeZone denoted by the given String */
+  def map(javaTimeZoneName: String): TimeInZone[TimeZone] = {
+    val tzInstance = TimeZone(javaTimeZoneName)
+    new TimeInZone(tzInstance, utc)
+  }
+
   /** Apply a transform to the underlying _local_ DateTime, resulting in a new instance in the same TimeZone */
   def transform(transformation: DateTime => DateTime): TimeInZone[TZ] = {
     val result = transformation(local)
