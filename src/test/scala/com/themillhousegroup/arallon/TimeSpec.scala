@@ -36,7 +36,7 @@ class TimeSpec extends Specification with LazyLogging {
       nycNow must not be equalTo(parisNow)
 
       // But they still refer to the same instant (give or take a few):
-      nycNow.utcMillis / 1000 must be equalTo (parisNow.utcMillis / 1000)
+      nycNow.utcMillis / 10000 must be equalTo (parisNow.utcMillis / 10000)
 
     }
 
