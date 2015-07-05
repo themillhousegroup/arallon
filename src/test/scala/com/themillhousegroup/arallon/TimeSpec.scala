@@ -26,6 +26,20 @@ class TimeSpec extends Specification with LazyLogging {
       gmtNow must not beNull
     }
 
+    "allow construction of the correct current time in an explicit zone" in {
+      val nycNow: TimeInZone[_ <: TimeZone] = TimeInZone.now("America/New_York")
+      val parisNow: TimeInZone[_ <: TimeZone] = TimeInZone.now("Europe/Paris")
+
+      logger.info(s"NYC: $nycNow")
+      logger.info(s"PAR: $parisNow")
+
+      nycNow must not be equalTo(parisNow)
+
+      // But they still refer to the same instant (give or take a few):
+      nycNow.utcMillis / 1000 must be equalTo (parisNow.utcMillis / 1000)
+
+    }
+
     "allow construction of a time from millis, which must be in UTC" in {
       val millis = 1430222400000L
       val someUTCTime: TimeInZone[UTC] = TimeInZone.fromUTCMillis(millis)

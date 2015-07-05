@@ -13,10 +13,11 @@ object TimeInZone {
     now(z)
   }
 
+  /** This instant, expressed in the given TimeZone - i.e. the 'local' field will be appropriate */
   def now(javaTimeZoneName: String): TimeInZone[TimeZone] = {
-    val hereNow = new DateTime()
     val tzInstance = TimeZone(javaTimeZoneName)
-    populateWithTime(tzInstance, hereNow)
+    val utc = new DateTime(DateTimeZone.UTC)
+    new TimeInZone(tzInstance, utc)
   }
 
   /** When you just want whatever time it is right now, expressed in UTC */
