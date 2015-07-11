@@ -32,4 +32,10 @@ class TimeZoneSpec extends Specification with LazyLogging {
     }
 
   }
+
+  "TimeZone toString" should {
+    "render UTC as simply 'UTC'" in {
+      TimeZone.UTC.toString must beEqualTo("UTC")
+    }
+  }
 }
