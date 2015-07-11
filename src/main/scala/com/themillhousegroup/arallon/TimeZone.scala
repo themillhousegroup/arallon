@@ -10,12 +10,13 @@ sealed trait TimeZone {
 class UTC extends TimeZone {
   val name = "UTC"
   override lazy val zone = DateTimeZone.UTC
+  override val toString: String = name
 }
 
 case class NonUTCTimeZone(val name: String) extends TimeZone {
   val toStringName = name.split("/").last
 
-  override def toString: String = s"$toStringName"
+  override val toString: String = s"$toStringName"
 }
 
 object TimeZone {
