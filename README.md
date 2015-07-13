@@ -3,7 +3,10 @@ arallon
 
 Strongly Typed Time for Scala.
 
-See [http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html](http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html)
+See 
+
+  - [http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html](http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html)
+  - [http://blog.themillhousegroup.com/2015/05/strongly-typed-time-part-2-design.html](http://blog.themillhousegroup.com/2015/05/strongly-typed-time-part-2-design.html)
 
 
 ### Installation
@@ -41,6 +44,25 @@ val nowInParis = TimeInZone[Paris]
 // TimeInZone[Paris] UTC: '2015-05-10T03:04:15.876Z' Local: '2015-05-10T05:04:15.876+02:00'
 ```
 
+##### Get a `TimeInZone[TZ]` in lots of other ways:
+```
+val fromAJavaTimeZoneString:TimeInZone[TimeZone] = TimeInZone.now("Europe/Paris")
+
+val now:TimeInZone[UTC] = TimeInZone.nowUTC
+
+val fromMillis:TimeInZone[UTC] = TimeInZone.fromUTCMillis(123456789)
+
+val fromMillisInTimeZone:TimeInZone[TimeZone] = TimeInZone.fromMillis(123456789, "Europe/Paris")
+
+val fromADateTime:TimeInZone[Berlin] = TimeInZone.fromUTCTo[Berlin](aJodaDateTimeInUTC)
+
+val fromADateTimeToUTC:TimeInZone[UTC] = TimeInZone.fromUTC(aJodaDateTimeInUTC)
+
+val fromADateTime:TimeInZone[Berlin] = TimeInZone[Berlin](aBerlinJodaDateTime)
+
+val inNamedZone:TimeInZone[TimeZone] = TimeInZone("America/New_York", aNewYorkJodaDateTime)
+```
+
 ##### Transform the time, while remaining in the same time zone:
 ```
 val threePMParisConferenceCall = nowInParis.transform(_.withTime(15,0,0,0))
@@ -54,8 +76,6 @@ val wakeUpCall = threePMParisConferenceCall.map[Sydney]
 
 ```
 Notice how performing the `map` to Sydney-time didn't change the instant being referred to - which is what you want if you're trying to join a conference call starting at that instant.
-
-
 
 If you're looking for something client-side to generate a nice IANA string (like `Europe/Paris`) take a look at
 [jstimezonedetect on GitHub](https://bitbucket.org/pellepim/jstimezonedetect) - pass that to your Scala server-side and you can be strongly-typed
