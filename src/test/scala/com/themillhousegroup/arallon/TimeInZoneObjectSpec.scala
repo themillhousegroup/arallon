@@ -53,6 +53,14 @@ class TimeInZoneObjectSpec extends Specification with LazyLogging {
       melTime.utcMillis must beEqualTo(millis)
     }
 
+    "allow construction of a time from a Joda Time UTC instance" in {
+      val millis = 1430222400000L
+      val joda = new DateTime(millis)
+      val someUTCTime: TimeInZone[UTC] = TimeInZone.fromUTC(joda)
+
+      someUTCTime.utcMillis must beEqualTo(millis)
+    }
+
     "allow construction of a UTC time representing 'now'" in {
       val nowUTCTime: TimeInZone[UTC] = TimeInZone.nowUTC
 
