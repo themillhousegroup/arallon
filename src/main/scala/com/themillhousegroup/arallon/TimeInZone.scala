@@ -106,7 +106,7 @@ case class TimeInZone[TZ <: TimeZone](val timezone: TZ, val utc: DateTime) exten
     this.copy(utc = result.withZone(DateTimeZone.UTC))
   }
 
-  override def toString: String = {
+  override val toString: String = {
     s"TimeInZone[${timezone}] UTC: '$utc' UTCMillis: '$utcMillis' Local: '$local' LocalDT: '$asLocalDateTime'"
   }
 }

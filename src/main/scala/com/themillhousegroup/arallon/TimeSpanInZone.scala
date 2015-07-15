@@ -40,7 +40,7 @@ case class TimeSpanInZone[TZ <: TimeZone](val timezone: TZ, val start: DateTime,
     new TimeSpanInZone(tzInstance, start, end)
   }
 
-  override def toString: String = {
+  override val toString: String = {
     s"TimeSpanInZone[${timezone}] StartUTCMillis: '$startUtcMillis', AsLocalDT: '$startAsLocalDateTime'"
   }
 }
