@@ -36,7 +36,7 @@ class TimeInZoneObjectSpec extends Specification with LazyLogging {
       nycNow must not be equalTo(parisNow)
 
       // But they still refer to the same instant (give or take a few):
-      nycNow.utcMillis / 10000 must be equalTo (parisNow.utcMillis / 10000)
+      nycNow.utcMillis must be closeTo (parisNow.utcMillis, 10000)
 
     }
 
