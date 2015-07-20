@@ -6,16 +6,17 @@ import com.typesafe.scalalogging.slf4j._
 import com.themillhousegroup.arallon.zones._
 
 class TimeSpanInZoneInstanceSpec extends Specification with LazyLogging {
+  val par = new Paris()
+  val mel = new Melbourne()
+  val now = new DateTime()
+  val later = now.plusHours(1)
+  val muchLater = now.plusHours(7)
+  val paris = TimeSpanInZone[Paris](par, now, later)
+  val melbourne = TimeSpanInZone[Melbourne](mel, now, later)
 
   "Strongly-typed timespan instances" should {
 
     "permit comparison of current times in a zone" in {
-      val p = new Paris()
-      val m = new Melbourne()
-      val now = new DateTime()
-      val later = new DateTime().plusHours(1)
-      val paris = TimeSpanInZone[Paris](p, now, later)
-      val melbourne = TimeSpanInZone[Melbourne](m, now, later)
       val parisInMel = paris.map[Melbourne]
 
       logger.info(s"paris is a   $paris")
@@ -34,16 +35,28 @@ class TimeSpanInZoneInstanceSpec extends Specification with LazyLogging {
 
 		}
 */
+    "support checking how another TimeSpanInZone compares with this one by comparing start instants - exact same tests" in {
+      paris.compare(paris) must beEqualTo(0)
+      paris.compare(paris.copy()) must beEqualTo(0)
+      paris.compare(paris.copy(end = muchLater)) must beEqualTo(0)
+      paris.compare(melbourne.map[Paris]) must beEqualTo(0)
+    }
+
+    "support checking how another TimeSpanInZone compares with this one by comparing start instants - later tests" in {
+      paris.compare(paris.copy(start = later, end = muchLater)) must beEqualTo(-3600000)
+    }
+
+    "support checking how another TimeSpanInZone compares with this one by comparing start instants - earlier tests" in {
+      val p2 = paris.copy(start = later, end = muchLater)
+      p2.compare(paris) must beEqualTo(3600000)
+    }
 
     "Not permit silly programming errors" in {
-      val paris = TimeInZone[Paris]
-      val melbourne = TimeInZone[Melbourne]
-
-      def somethingThatWorksInMelbourne(mel: TimeInZone[Melbourne]): Boolean = {
+      def somethingThatWorksInMelbourne(mel: TimeSpanInZone[Melbourne]): Boolean = {
         true
       }
 
-      def somethingThatWorksAnywhere(any: TimeInZone[_]): Boolean = {
+      def somethingThatWorksAnywhere(any: TimeSpanInZone[_]): Boolean = {
         true
       }
 
@@ -58,70 +71,32 @@ class TimeSpanInZoneInstanceSpec extends Specification with LazyLogging {
     }
 
     "allow me to map from one timezone to another by type signature alone" in {
-      val paris = TimeInZone[Paris]
+      val mel2 = paris.map[Melbourne]
+      paris must not be equalTo(mel2)
 
-      val melbourne = paris.map[Melbourne]
-      paris must not be equalTo(melbourne)
+      paris.timezone must not be equalTo(mel2.timezone)
 
-      paris.timezone must not be equalTo(melbourne.timezone)
-
-      paris.utc must be equalTo (melbourne.utc)
+      paris.startUtcMillis must be equalTo (mel2.startUtcMillis)
     }
 
     "allow me to map from one timezone to another by Java timezone name" in {
-      val paris = TimeInZone[Paris]
+      val mel3 = paris.map("Australia/Melbourne")
+      paris must not be equalTo(mel3)
 
-      val melbourne = paris.map("Australia/Melbourne")
-      paris must not be equalTo(melbourne)
+      paris.timezone must not be equalTo(mel3.timezone)
 
-      paris.timezone must not be equalTo(melbourne.timezone)
-
-      paris.utc must be equalTo (melbourne.utc)
+      paris.startUtcMillis must be equalTo (mel3.startUtcMillis)
     }
 
     "return 'this' if mapping from one timezone to itself" in {
-      val paris = TimeInZone[Paris]
-
-      val melbourne = paris.map[Melbourne]
-      paris must not be equalTo(melbourne)
+      val mel4 = paris.map[Melbourne]
+      paris must not be equalTo(mel4)
 
       val p1 = System.identityHashCode(paris)
       val paris2 = paris.map[Paris]
       val p2 = System.identityHashCode(paris2)
 
       p1 must beEqualTo(p2)
-    }
-
-    "allow me to offset a timespan within a timezone" in {
-      val paris = TimeInZone[Paris]
-
-      val parisMillis = paris.utcMillis
-
-      val laterThatDay = paris.transform(_.plusHours(3))
-      paris must not be equalTo(laterThatDay)
-
-      paris.timezone must beEqualTo(laterThatDay.timezone)
-
-      paris.utc must not be equalTo(laterThatDay.utc)
-
-      val laterMillis = laterThatDay.utcMillis
-
-      laterMillis must beEqualTo(parisMillis + (3 * 60 * 60 * 1000))
-    }
-
-    "allow me to adjust a timespan within a timezone" in {
-      val paris = TimeInZone[Paris]
-
-      val laterThatDay = paris.transform(_.withTime(17, 0, 0, 0))
-      paris must not be equalTo(laterThatDay)
-
-      paris.timezone must beEqualTo(laterThatDay.timezone)
-
-      paris.utc must not be equalTo(laterThatDay.utc)
-
-      println(laterThatDay.utc.getHourOfDay)
-
-      laterThatDay.utc.getHourOfDay must not be equalTo(17)
     }
   }
 }
