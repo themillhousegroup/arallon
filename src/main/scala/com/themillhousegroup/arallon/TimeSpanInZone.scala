@@ -6,6 +6,16 @@ import com.themillhousegroup.arallon.traits._
 import scala.reflect._
 import scala.reflect.ClassTag
 
+/** Not sure what object methods will be useful. Just doing some obvious ones to begin... */
+object TimeSpanInZone {
+  /** When all you have is millis. Implies that you are in UTC, so gives back a strong type to that effect */
+  def fromUTCMillis(startUtcMillis: Long, endUtcMillis: Long): TimeSpanInZone[UTC] = {
+    val startUtcTime = new DateTime(startUtcMillis, DateTimeZone.UTC)
+    val endUtcTime = new DateTime(endUtcMillis, DateTimeZone.UTC)
+    TimeSpanInZone(TimeZone.UTC, startUtcTime, endUtcTime)
+  }
+}
+
 /**
  * Represents some finite period of time
  * with a start and an end,
