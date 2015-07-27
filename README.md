@@ -3,6 +3,8 @@ arallon
 
 Strongly Typed Time for Scala.
 
+[![Build Status](https://travis-ci.org/themillhousegroup/arallon.svg?branch=master)](https://travis-ci.org/themillhousegroup/arallon)
+
 See 
 
   - [http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html](http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html)
