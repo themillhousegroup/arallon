@@ -13,13 +13,13 @@ class TimeSpanInZoneObjectSpec extends Specification with LazyLogging {
   val muchLater = now.plusHours(7)
   val paris = TimeSpanInZone[Paris](par, now, later)
   val melbourne = TimeSpanInZone[Melbourne](mel, now, later)
-	val baseMillis = 1437720026000L
+  val baseMillis = 1437720026000L
 
   "Strongly-typed timespan companion object" should {
 
     "allow creation of a UTC timespan using two Long values" in {
-			val utcSpan = TimeSpanInZone.fromUTCMillis(baseMillis, baseMillis + 9000)
-			utcSpan.timezone must beEqualTo(TimeZone.UTC)
+      val utcSpan = TimeSpanInZone.fromUTCMillis(baseMillis, baseMillis + 9000)
+      utcSpan.timezone must beEqualTo(TimeZone.UTC)
     }
-	}
+  }
 }
