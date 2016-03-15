@@ -52,9 +52,9 @@ object TimeInZone {
 
   /**
    * Returns "now" in the given timezone
-    *
-    * e.g. val nowInMelbourne = TimeInZone[Melbourne]
-    */
+   *
+   * e.g. val nowInMelbourne = TimeInZone[Melbourne]
+   */
   def apply[T <: TimeZone: ClassTag]: TimeInZone[T] = {
     val nowUTC = new DateTime(DateTimeZone.UTC)
     apply[T](nowUTC)
