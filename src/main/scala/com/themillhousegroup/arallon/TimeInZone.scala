@@ -50,17 +50,32 @@ object TimeInZone {
     new TimeInZone(TimeZone.UTC, utcTime)
   }
 
+  /**
+   * Returns "now" in the given timezone
+    *
+    * e.g. val nowInMelbourne = TimeInZone[Melbourne]
+    */
   def apply[T <: TimeZone: ClassTag]: TimeInZone[T] = {
     val nowUTC = new DateTime(DateTimeZone.UTC)
     apply[T](nowUTC)
   }
 
+  /**
+   * Returns a TimeInZone representing the specified instant in the given timezone
+   *
+   * e.g. val nowInMelbourne = TimeInZone[Melbourne]
+   */
   def apply[T <: TimeZone: ClassTag](timeInThatZone: DateTime): TimeInZone[T] = {
     val t = classTag[T]
     val tzInstance: T = ReflectionHelper.construct(t, List())
     populateWithTime(tzInstance, timeInThatZone).asInstanceOf[TimeInZone[T]]
   }
 
+  /**
+   * Returns a TimeInZone representing the specified instant in the given timezone
+   *
+   * e.g. val nowInMelbourne = TimeInZone[Melbourne]
+   */
   def apply(javaTimeZoneName: String, timeInThatZone: DateTime): TimeInZone[TimeZone] = {
     val tzInstance = TimeZone(javaTimeZoneName)
     populateWithTime(tzInstance, timeInThatZone)
