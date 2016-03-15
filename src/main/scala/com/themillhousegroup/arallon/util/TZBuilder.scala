@@ -23,7 +23,7 @@ object TZBuilder {
 
     singleWordNames.filter { case (k, v) => k != "UTC" }.map {
       case (k, v) =>
-        k -> s"""class $k extends NonUTCTimeZone("$v")\n"""
+        k -> s"""final class $k extends NonUTCTimeZone("$v")\n"""
     }.values.toList.sortWith(caseInsensitiveStringSort)
   }
 }
