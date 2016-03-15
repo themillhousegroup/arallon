@@ -72,7 +72,7 @@ object TimeInZone {
   }
 }
 
-case class TimeInZone[TZ <: TimeZone](val timezone: TZ, val utc: DateTime) extends Ordered[TimeInZone[TZ]]
+final case class TimeInZone[TZ <: TimeZone](val timezone: TZ, val utc: DateTime) extends Ordered[TimeInZone[TZ]]
     with Comparisons[TZ] with Serializing[TZ] {
   val utcMillis: Long = utc.getMillis
   lazy val local: DateTime = utc.withZone(timezone.zone)
