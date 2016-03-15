@@ -7,7 +7,7 @@ sealed trait TimeZone {
   lazy val zone = DateTimeZone.forID(name)
 }
 
-class UTC extends TimeZone {
+final class UTC extends TimeZone {
   val name = "UTC"
   override lazy val zone = DateTimeZone.UTC
   override val toString: String = name
