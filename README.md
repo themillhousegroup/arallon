@@ -26,7 +26,7 @@ Bring in the library by adding the following to your ```build.sbt```.
 
 ```
    libraryDependencies ++= Seq(
-     "com.themillhousegroup" %% "arallon" % "0.1.18"
+     "com.themillhousegroup" %% "arallon" % "0.1.43"
    )
 
 ```
