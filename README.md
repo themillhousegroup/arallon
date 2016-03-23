@@ -9,7 +9,7 @@ See
 
   - [http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html](http://blog.themillhousegroup.com/2015/04/strongly-typed-time-part-1-rationale.html)
   - [http://blog.themillhousegroup.com/2015/05/strongly-typed-time-part-2-design.html](http://blog.themillhousegroup.com/2015/05/strongly-typed-time-part-2-design.html)
-
+  - [http://blog.themillhousegroup.com/2015/07/strongly-typed-time-part-3-application.html](http://blog.themillhousegroup.com/2015/07/strongly-typed-time-part-3-application.html)
 
 ### Installation
 
