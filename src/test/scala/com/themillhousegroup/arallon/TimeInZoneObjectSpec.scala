@@ -12,6 +12,7 @@ import com.themillhousegroup.arallon.zones._
 class TimeInZoneObjectSpec extends Specification with LazyLogging {
 
   "Strongly-typed time object" should {
+
     "allow construction of current time in a zone" in {
       val hereNow: TimeInZone[_ <: TimeZone] = TimeInZone.now
 
@@ -98,17 +99,33 @@ class TimeInZoneObjectSpec extends Specification with LazyLogging {
 
       newYork.utcMillis must not be equalTo(losAngeles.utcMillis)
     }
-
     "allow construction of current time in a zone purely by type signature" in {
       val paris = TimeInZone[Paris]
       val melbourne = TimeInZone[Melbourne]
 
-      //			logger.info(s"paris is a $paris")
-      //			logger.info(s"mel is a $melbourne")
+      logger.info(s"paris is a $paris")
+      logger.info(s"mel is a $melbourne")
 
       paris must not be equalTo(melbourne)
 
       paris.timezone must not be equalTo(melbourne.timezone)
+    }
+
+    "allow construction of current time by type signature but referring to same instant" in {
+      val newYork = TimeInZone[New_York].transform(_.withSecondOfMinute(0).withMillisOfSecond(0))
+      val paris = TimeInZone[Paris].transform(_.withSecondOfMinute(0).withMillisOfSecond(0))
+      val melbourne = TimeInZone[Melbourne].transform(_.withSecondOfMinute(0).withMillisOfSecond(0))
+      val utc = TimeInZone[UTC].transform(_.withSecondOfMinute(0).withMillisOfSecond(0))
+
+      logger.info(s"UTC is $utc")
+      logger.info(s"NY is $newYork")
+      logger.info(s"paris is $paris")
+      logger.info(s"mel is $melbourne")
+
+      utc.utcMillis must beEqualTo(melbourne.utcMillis)
+      paris.utcMillis must beEqualTo(melbourne.utcMillis)
+      newYork.utcMillis must beEqualTo(melbourne.utcMillis)
+
     }
   }
 }

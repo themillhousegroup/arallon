@@ -57,7 +57,9 @@ object TimeInZone {
    */
   def apply[T <: TimeZone: ClassTag]: TimeInZone[T] = {
     val nowUTC = new DateTime(DateTimeZone.UTC)
-    apply[T](nowUTC)
+    val t = classTag[T]
+    val tzInstance: T = ReflectionHelper.construct(t, List())
+    populateWithUtcTime(tzInstance, nowUTC).asInstanceOf[TimeInZone[T]]
   }
 
   /**
@@ -83,7 +85,11 @@ object TimeInZone {
 
   private def populateWithTime(tzInstance: TimeZone, timeInThatZone: DateTime) = {
     val utc = timeInThatZone.withZoneRetainFields(tzInstance.zone).withZone(DateTimeZone.UTC)
-    new TimeInZone(tzInstance, utc)
+    populateWithUtcTime(tzInstance, utc)
+  }
+
+  private def populateWithUtcTime(tzInstance: TimeZone, utcTime: DateTime) = {
+    new TimeInZone(tzInstance, utcTime)
   }
 }
 
