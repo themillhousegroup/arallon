@@ -3,6 +3,8 @@ package com.themillhousegroup.arallon
 import org.joda.time._
 import com.themillhousegroup.arallon.util.ReflectionHelper
 import com.themillhousegroup.arallon.traits._
+import org.joda.time.format.DateTimeFormatter
+
 import scala.reflect._
 import scala.reflect.ClassTag
 
@@ -129,6 +131,22 @@ final case class TimeInZone[TZ <: TimeZone](val timezone: TZ, val utc: DateTime)
 
   override val toString: String = {
     s"TimeInZone[${timezone}] UTC: '$utc' UTCMillis: '$utcMillis' Local: '$local' LocalDT: '$asLocalDateTime'"
+  }
+
+  /** Much like Joda-Time's `toString(formatter` -
+    * supply a formatter that will be called with the
+    * underlying **UTC** Joda-Time instance
+    * */
+  def toString(formatter:DateTimeFormatter): String = {
+    utc.toString(formatter)
+  }
+  
+  /** Much like Joda-Time's `toString(formatter` -
+    * supply a formatter that will be called with the
+    * underlying **LOCAL** Joda-Time instance
+    * */
+  def toLocalString(formatter:DateTimeFormatter): String = {
+    local.toString(formatter)
   }
 }
 
