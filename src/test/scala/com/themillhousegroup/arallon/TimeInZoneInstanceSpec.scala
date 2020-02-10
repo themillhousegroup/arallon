@@ -2,7 +2,7 @@ package com.themillhousegroup.arallon
 
 import org.specs2.mutable.Specification
 import org.joda.time.DateTime
-import com.typesafe.scalalogging.slf4j._
+import com.typesafe.scalalogging.LazyLogging
 import com.themillhousegroup.arallon.zones._
 
 class TimeInZoneInstanceSpec extends Specification with LazyLogging {

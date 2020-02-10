@@ -6,7 +6,7 @@ import scala.concurrent.Future
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import org.joda.time.{ DateTimeZone, DateTime }
-import com.typesafe.scalalogging.slf4j._
+import com.typesafe.scalalogging.LazyLogging
 import com.themillhousegroup.arallon.zones._
 
 class OrderingSpec extends Specification with LazyLogging {

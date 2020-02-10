@@ -2,7 +2,7 @@ package com.themillhousegroup.arallon
 
 import org.specs2.mutable.Specification
 import org.joda.time.DateTime
-import com.typesafe.scalalogging.slf4j._
+import com.typesafe.scalalogging.LazyLogging
 import com.themillhousegroup.arallon.zones._
 
 class DayInZoneInstanceSpec extends Specification with LazyLogging {
@@ -16,8 +16,8 @@ class DayInZoneInstanceSpec extends Specification with LazyLogging {
   "Strongly-typed day-in-zone instances" should {
 
     "permit creation of day in a zone" in {
-      logger.info(s"paris is a   $paris")
-      logger.info(s"mel is a $melbourne")
+      //      logger.info(s"paris is a   $paris")
+      //      logger.info(s"mel is a $melbourne")
 
       paris must not be equalTo(melbourne)
 
