@@ -22,11 +22,11 @@ Bring in the library by adding the following to your ```build.sbt```.
      "Millhouse Bintray"  at "http://dl.bintray.com/themillhousegroup/maven"
    )
 ```
-  - The dependency itself: 
+  - The dependency itself (for Scala 2.11 and 2.12): 
 
 ```
    libraryDependencies ++= Seq(
-     "com.themillhousegroup" %% "arallon" % "0.1.45"
+     "com.themillhousegroup" %% "arallon" % "0.1.49"
    )
 
 ```
